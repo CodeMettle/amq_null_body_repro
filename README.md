@@ -57,13 +57,24 @@ cd apache-activemq-5.15.4/
 
 ```
 ...
+jvm 1    |  INFO | Connector vm://localhost started
+jvm 1    |  INFO | Initialization done
+jvm 1    |  INFO | Sending message #1000
+jvm 1    | ERROR | Got NULL message body: AMQMessage(null,JMSMessageProperties(Some(ID:stevencentos7vm-37982-1527643119840-16:1:1:1:455),1527643139187,None,None,Some(Topic(topic1)),2,false,Some(msgType1),0,4),Map(JMSXGroupID -> 82, JMSXGroupSeq -> 0))
+jvm 1    |  INFO | Sending message #2000
+jvm 1    |  INFO | Sending message #3000
+jvm 1    |  INFO | Sending message #4000
+jvm 1    |  INFO | Sending message #5000
+jvm 1    | ERROR | Got NULL message body: AMQMessage(null,JMSMessageProperties(Some(ID:stevencentos7vm-37982-1527643119840-16:1:1:1:1753),1527643182186,None,None,Some(Topic(topic1)),2,false,Some(msgType1),0,4),Map(JMSXGroupID -> 54, JMSXGroupSeq -> 0))
+jvm 1    |  INFO | Sending message #6000
+jvm 1    |  INFO | Sending message #7000
+jvm 1    |  INFO | Sending message #8000
+jvm 1    |  INFO | Sending message #9000
 jvm 1    |  INFO | Sending message #10000
-jvm 1    | ERROR | Got NULL message body: AMQMessage(null,JMSMessageProperties(Some(ID:stevencentos7vm-37095-1527640225751-16:1:1:1:3481),1527640346096,None,None,Some(Topic(topic2)),2,false,Some(msgType2),0,4),Map(JMSXGroupID -> 41, JMSXGroupSeq -> 0))
+jvm 1    | ERROR | Got NULL message body: AMQMessage(null,JMSMessageProperties(Some(ID:stevencentos7vm-37982-1527643119840-16:1:1:3:3552),1527643242188,None,None,Some(Topic(topic3)),2,false,Some(msgType3),0,4),Map(JMSXGroupID -> 155, JMSXGroupSeq -> 0))
+jvm 1    | ERROR | Got NULL message body: AMQMessage(null,JMSMessageProperties(Some(ID:stevencentos7vm-37982-1527643119840-16:1:1:2:3603),1527643244171,None,None,Some(Topic(topic2)),2,false,Some(msgType2),0,4),Map(JMSXGroupID -> 95, JMSXGroupSeq -> 0))
+jvm 1    | ERROR | Got NULL message body: AMQMessage(null,JMSMessageProperties(Some(ID:stevencentos7vm-37982-1527643119840-16:1:1:3:3652),1527643245180,None,None,Some(Topic(topic3)),2,false,Some(msgType3),0,4),Map(JMSXGroupID -> 59, JMSXGroupSeq -> 0))
 jvm 1    |  INFO | Sending message #11000
-jvm 1    |  INFO | Sending message #12000
-jvm 1    |  INFO | Sending message #13000
-jvm 1    | ERROR | Got NULL message body: AMQMessage(null,JMSMessageProperties(Some(ID:stevencentos7vm-37095-1527640225751-16:1:1:2:4390),1527640376123,None,None,Some(Topic(topic3)),2,false,Some(msgType3),0,4),Map(JMSXGroupID -> 33, JMSXGroupSeq -> 0))
-jvm 1    |  INFO | Sending message #14000
 ...
 ```
 
@@ -87,8 +98,8 @@ What the test is doing
  separate topics (1 topic for each of the original messages)
 * Starts 3 connections on NIO transports, each listening to all 3 topics, does 
  nothing with those messages upon receiving them
-* Starts 3 connections on VM transports, each listening to all 3 topics. One of
- these connections logs messages that have `null` bodies (which, of course, 
+* Starts 3 connections on VM transports, each listening to all 3 topics. 
+ These connections log messages that have `null` bodies (which, of course, 
  should be none of the messages)
 
 ### Technical note
