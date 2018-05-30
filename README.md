@@ -6,6 +6,8 @@ I believe an issue similar to
 or
 [AMQ-6256](https://issues.apache.org/jira/browse/AMQ-6256)
 still exists in ActiveMQ 5.15.4, the latest release as of today.
+[AMQ-6221](https://issues.apache.org/jira/browse/AMQ-6221)
+also seems related, but was closed as `Won't Fix`.
 
 # Replication
 
