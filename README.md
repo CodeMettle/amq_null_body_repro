@@ -122,4 +122,5 @@ hands the immutable object off to the Akka library. An analogous operation
 applies for message sending - it only deals with the immutable `AMQMessage`
 object until calling `MessageProducer.send` (and does not retain a reference to
 the sent message). Thus, I am convinced that the race condition demonstrated by
-this test isn't caused by user code.
+this test isn't caused by improper user code (such as non-thread-safe handling
+of original `jms.TextMessage`s).
