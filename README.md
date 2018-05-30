@@ -108,7 +108,7 @@ jvm 1    |  INFO | Sending message #11000
 
 This will log all messages sent with their original bodies at TRACE log level to
 the activemq.log file, a small percentage of which will have `null` returned 
-from the `Message.getText` method called in `MessageListener.onMessage`.
+from the `TextMessage.getText` method called in `MessageListener.onMessage`.
 
 In `conf/log4j.properties`:
 
