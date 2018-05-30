@@ -9,6 +9,20 @@ still exists in ActiveMQ 5.15.4, the latest release as of today.
 [AMQ-6221](https://issues.apache.org/jira/browse/AMQ-6221)
 also seems related, but was closed as `Won't Fix`.
 
+# What the test is doing
+
+* Starts a connection on the openwire (tcp) transport using an `nio://` address
+* Every second, this produces 3 `TextMessage`s to a topic, each made up of 30
+ strings between 1k & 2k characters (joined in a JSON format)
+* Starts a connection on the VM transport which consumes these messages, splits
+ them into the 30 individual messages, and pushes the individual messages to 3
+ separate topics (1 topic for each of the original messages)
+* Starts 3 connections on NIO transports, each listening to all 3 topics, does 
+ nothing with those messages upon receiving them
+* Starts 3 connections on VM transports, each listening to all 3 topics. 
+ These connections log messages that have `null` bodies (which, of course, 
+ should be none of the messages)
+
 # Replication
 
 * Get ActiveMQ
@@ -107,20 +121,6 @@ log4j.logger.Topic(topic1)=TRACE
 log4j.logger.Topic(topic2)=TRACE
 log4j.logger.Topic(topic3)=TRACE
 ```
-
-# What the test is doing
-
-* Starts a connection on the openwire (tcp) transport using an `nio://` address
-* Every second, this produces 3 `TextMessage`s to a topic, each made up of 30
- strings between 1k & 2k characters (joined in a JSON format)
-* Starts a connection on the VM transport which consumes these messages, splits
- them into the 30 individual messages, and pushes the individual messages to 3
- separate topics (1 topic for each of the original messages)
-* Starts 3 connections on NIO transports, each listening to all 3 topics, does 
- nothing with those messages upon receiving them
-* Starts 3 connections on VM transports, each listening to all 3 topics. 
- These connections log messages that have `null` bodies (which, of course, 
- should be none of the messages)
 
 ### Technical note
 
