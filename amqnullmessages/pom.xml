@@ -5,6 +5,7 @@
   <version>1.0-SNAPSHOT</version>
 
   <properties>
+    <activemq-version>5.15.4</activemq-version>
     <akka-version>2.5.11</akka-version>
     <reactivemq-version>1.5.0-SNAPSHOT</reactivemq-version>
     <scala-logging-version>3.8.0</scala-logging-version>
@@ -26,6 +27,12 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
       <version>${spring-version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-client</artifactId>
+      <version>${activemq-version}</version>
       <scope>provided</scope>
     </dependency>
 
