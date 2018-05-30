@@ -19,7 +19,7 @@ class TestRepro extends StrictLogging with InitializingBean with DisposableBean 
 
     // create listeners on VM transports to duplicate listeners on routers in AMQ
     systems ++= (for (i <- 1 to 3)
-      yield new TopicListeners(vmActSys(s"Local$i"), logNulls = i == 1))
+      yield new TopicListeners(vmActSys(s"Local$i"), logNulls = true))
 
     // create splitter on VM transport that takes in messages, sends them to queue, splits the messages, and sends them
     // to various topics to be consumed by TopicListeners
