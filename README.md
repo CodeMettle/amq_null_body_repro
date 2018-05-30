@@ -1,9 +1,8 @@
 AMQ Null Text Bodies
 ====================
 
-I believe the issue described in [AMQ-6256](https://issues.apache.org/jira/browse/AMQ-6256),
-or a similar issue, still exists in ActiveMQ 5.15.4, the latest release as of 
-today.
+I believe an issue similar to [AMQ-6256](https://issues.apache.org/jira/browse/AMQ-6256)
+still exists in ActiveMQ 5.15.4, the latest release as of today.
 
 # Replication
 
