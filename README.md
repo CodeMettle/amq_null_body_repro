@@ -1,6 +1,12 @@
 AMQ Null Text Bodies
 ====================
 
+I believe the issue described in [AMQ-6256](https://issues.apache.org/jira/browse/AMQ-6256),
+or a similar issue, still exists in ActiveMQ 5.15.4, the latest release as of 
+today.
+
+# Replication
+
 * Get ActiveMQ
 
 ```bash
@@ -55,6 +61,8 @@ cd apache-activemq-5.15.4/
 ./bin/linux-x86-64/activemq console
 ```
 
+* Observe error logs when a message has a `null` body
+
 ```
 ...
 jvm 1    |  INFO | Connector vm://localhost started
@@ -78,8 +86,11 @@ jvm 1    |  INFO | Sending message #11000
 ...
 ```
 
-Logging all sent messages
-=========================
+## Logging all sent messages
+
+This will log all messages sent with their original bodies at TRACE log level to
+the activemq.log file, a small percentage of which will have `null` returned 
+from the `Message.getText` method called in `MessageListener.onMessage`.
 
 In `conf/log4j.properties`:
 
@@ -87,8 +98,7 @@ In `conf/log4j.properties`:
 log4j.logger.codemettle.Splitter$ListenActor=TRACE
 ```
 
-What the test is doing
-======================
+# What the test is doing
 
 * Starts a connection on the openwire (tcp) transport using an `nio://` address
 * Every second, this produces 3 `TextMessage`s to a topic, each made up of 30
