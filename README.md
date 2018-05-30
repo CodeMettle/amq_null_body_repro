@@ -99,7 +99,13 @@ from the `Message.getText` method called in `MessageListener.onMessage`.
 In `conf/log4j.properties`:
 
 ```properties
+# log when messages are sent
 log4j.logger.codemettle.Splitter$ListenActor=TRACE
+
+# log when non-null body messages are received (null bodies always logged)
+log4j.logger.Topic(topic1)=TRACE
+log4j.logger.Topic(topic2)=TRACE
+log4j.logger.Topic(topic3)=TRACE
 ```
 
 # What the test is doing
