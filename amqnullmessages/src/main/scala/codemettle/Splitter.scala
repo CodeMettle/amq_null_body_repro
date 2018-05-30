@@ -25,10 +25,17 @@ object Splitter {
     private val topic2 = Topic(Topic2)
     private val topic3 = Topic(Topic3)
 
+    private var sent = 0
+
     private def sendTopicMessage(dest: Destination, msg: AMQMessage)(implicit timeout: FiniteDuration) = {
       val request = SendMessage(dest, msg, timeout = timeout)
 
       logger.trace(s"Sending $msg")
+
+      sent += 1
+
+      if (sent % 1000 == 0)
+        logger.info(s"Sending message #$sent")
 
       implicit val to: Timeout = Timeout(timeout + 3.seconds)
 
