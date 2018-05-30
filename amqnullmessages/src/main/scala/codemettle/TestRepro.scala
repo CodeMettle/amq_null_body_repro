@@ -21,9 +21,6 @@ class TestRepro extends StrictLogging with InitializingBean with DisposableBean 
     systems ++= (for (i <- 1 to 3)
       yield new TopicListeners(vmActSys(s"Local$i"), logNulls = i == 1))
 
-    // setup queue on VM transport that responds to messages
-    systems :+= new QueueReplierSystem(vmActSys("Replier"))
-
     // create splitter on VM transport that takes in messages, sends them to queue, splits the messages, and sends them
     // to various topics to be consumed by TopicListeners
     systems :+= new Splitter(vmActSys("Splitter"))

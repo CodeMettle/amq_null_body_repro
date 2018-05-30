@@ -4,7 +4,7 @@ import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.pattern.{AskTimeoutException, ask}
 import akka.util.Timeout
 import codemettle.Splitter.ListenActor
-import com.codemettle.reactivemq.ReActiveMQMessages.{RequestMessage, SendMessage}
+import com.codemettle.reactivemq.ReActiveMQMessages.SendMessage
 import com.codemettle.reactivemq.TopicConsumer
 import com.codemettle.reactivemq.model._
 import com.typesafe.scalalogging.StrictLogging
@@ -19,20 +19,11 @@ object Splitter {
 
     override def connection: ActorRef = esbConnection
 
-
     override def consumeFrom: Topic = Topic(SplitterTopic)
 
     private val topic1 = Topic(Topic1)
     private val topic2 = Topic(Topic2)
     private val topic3 = Topic(Topic3)
-
-    private def queueSendRecv(msg: AMQMessage)(implicit timeout: FiniteDuration) = {
-      val request = RequestMessage(Queue("aQueue"), msg, timeout)
-
-      implicit val to: Timeout = Timeout(timeout + 3.seconds)
-
-      (esbConnection ? request).mapTo[AMQMessage].map(m => if (m.bodyAs[String] != "ok") sys.error("unexpected resp"))
-    }
 
     private def sendTopicMessage(dest: Destination, msg: AMQMessage)(implicit timeout: FiniteDuration) = {
       val request = SendMessage(dest, msg, timeout = timeout)
@@ -70,15 +61,15 @@ object Splitter {
           case None ⇒ logger.warn(s"Invalid message: $msg")
 
           case Some(MsgType1) ⇒ doOp(msg) {
-            queueSendRecv(msgCopy).flatMap(_ ⇒ sendBulkTopicMessage(topic1, msgCopy.withType(MsgType1)))
+            sendBulkTopicMessage(topic1, msgCopy.withType(MsgType1))
           }
 
           case Some(MsgType2) ⇒ doOp(msg) {
-            queueSendRecv(msgCopy).flatMap(_ ⇒ sendBulkTopicMessage(topic2, msgCopy.withType(MsgType2)))
+            sendBulkTopicMessage(topic2, msgCopy.withType(MsgType2))
           }
 
           case Some(MsgType3) ⇒ doOp(msg) {
-            queueSendRecv(msgCopy).flatMap(_ ⇒ sendBulkTopicMessage(topic3, msgCopy.withType(MsgType3)))
+            sendBulkTopicMessage(topic3, msgCopy.withType(MsgType3))
           }
 
           case Some(_) ⇒ logger.warn(s"Invalid JMSType: $msg")
