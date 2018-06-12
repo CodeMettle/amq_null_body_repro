@@ -51,7 +51,7 @@ diff -uw apache-activemq-5.15.4/conf/activemq.xml.orig apache-activemq-5.15.4/co
      -->
      <import resource="jetty.xml"/>
  
-+    <bean id="test" class="codemettle.TestRepro"/>
++    <bean id="test" class="com.codemettle.TestRepro"/>
 +
  </beans>
  <!-- END SNIPPET: example -->
@@ -104,34 +104,3 @@ jvm 1    |  INFO | Sending message #11000
 ...
 ```
 
-## Logging all sent messages
-
-This will log all messages sent with their original bodies at TRACE log level to
-the activemq.log file, a small percentage of which will have `null` returned 
-from the `TextMessage.getText` method called in `MessageListener.onMessage`.
-
-In `conf/log4j.properties`:
-
-```properties
-# log when messages are sent
-log4j.logger.codemettle.Splitter$ListenActor=TRACE
-
-# log when non-null body messages are received (null bodies always logged)
-log4j.logger.Topic(topic1)=TRACE
-log4j.logger.Topic(topic2)=TRACE
-log4j.logger.Topic(topic3)=TRACE
-```
-
-### Technical note
-
-This test is using an ActiveMQ wrapper library based on Akka message passing, 
-using an immutable model class converted to/from `jms.Message`s. It solely deals
-with the immutable models except at the boundaries of ActiveMQ code; e.g. it
-creates a `MessageListener` whose `onMessage` method simply converts from a
-`jms.Message` to an immutable `AMQMessage` (on the calling thread) and then
-hands the immutable object off to the Akka library. An analogous operation 
-applies for message sending - it only deals with the immutable `AMQMessage`
-object until calling `MessageProducer.send` (and does not retain a reference to
-the sent message). Thus, I am convinced that the race condition demonstrated by
-this test isn't caused by improper user code (such as non-thread-safe handling
-of original `jms.TextMessage`s).
